@@ -181,7 +181,7 @@ const Home: React.FC = () => {
           )} */}
 
                     <FabMenu title="메뉴">≡</FabMenu>
-                    <div>중근티비치킨</div>
+                    <div>중근티비치킨111</div>
                 </Content>
             </Hero>
         </Root>
