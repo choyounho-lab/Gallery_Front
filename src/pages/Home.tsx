@@ -179,14 +179,6 @@ const Home: React.FC = () => {
               <Meta>{exhibit.period ?? ""}</Meta>
             </InfoCard>
           )} */}
-<<<<<<< Updated upstream
-                    <div>aa</div>
-                    <FabMenu title="메뉴">≡</FabMenu>
-                </Content>
-            </Hero>
-        </Root>
-    );
-=======
 
           <FabMenu title="메뉴">≡</FabMenu>
           <div>jjjjjjjjjjjjj123123j12312312</div>
@@ -194,7 +186,6 @@ const Home: React.FC = () => {
       </Hero>
     </Root>
   );
->>>>>>> Stashed changes
 };
 
 export default Home;
