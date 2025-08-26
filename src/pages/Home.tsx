@@ -179,7 +179,7 @@ const Home: React.FC = () => {
               <Meta>{exhibit.period ?? ""}</Meta>
             </InfoCard>
           )} */}
-                    <div>13</div>
+                    <div>13123123123</div>
                     <FabMenu title="메뉴">≡</FabMenu>
 <<<<<<< Updated upstream
                     <div>중근티비치킨111</div>
