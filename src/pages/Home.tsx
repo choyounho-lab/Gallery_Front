@@ -1,4 +1,3 @@
-
 // - 상단 히어로는 백엔드 추천 → 실패 시 KCISA 1건 폴백 → 최종 임시 데이터
 // - 하단 추천 그리드는 KCISA 8건
 // - AbortController 로 언마운트시 요청 취소 처리
@@ -129,5 +128,7 @@ const Home: React.FC = () => {
         </CS.Grid>
       </CS.Section>
     </Common.Root>
+
   );
+  };
 export default Home;
