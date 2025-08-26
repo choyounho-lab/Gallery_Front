@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Home from "../pages/Home";
-import Login from "../member/Login"; // ✅ 여기 추가
+import Login from "../member/Login";
 
 function Router() {
   return (
