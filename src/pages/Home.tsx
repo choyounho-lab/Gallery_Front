@@ -178,12 +178,12 @@ const Home: React.FC = () => {
             </InfoCard>
           )} */}
 
-          <FabMenu title="메뉴">≡</FabMenu>
-          <div>jjjjjjjjjjjjj123123j</div>
-        </Content>
-      </Hero>
-    </Root>
-  );
+                    <FabMenu title="메뉴">≡</FabMenu>
+                    <div>중근티비치킨112122</div>
+                </Content>
+            </Hero>
+        </Root>
+    );
 };
 
 export default Home;
