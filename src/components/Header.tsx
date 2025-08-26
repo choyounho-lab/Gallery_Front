@@ -88,7 +88,6 @@ const Header: React.FC = () => {
 
       <Right>
         <Pill>ENG</Pill>
-        {/* ✅ 클릭하면 /member/login 으로 이동 */}
         <Pill onClick={() => navigate("/member/login")}>로그인</Pill>
         <Pill>회원가입</Pill>
       </Right>
