@@ -130,7 +130,7 @@ const Home: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  상세보기
+                  상세보기1
                 </CS.CardLink>
               </CS.CardBody>
             </CS.Card>
