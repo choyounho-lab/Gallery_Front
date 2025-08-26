@@ -181,11 +181,7 @@ const Home: React.FC = () => {
           )} */}
                     <div>13123123123</div>
                     <FabMenu title="메뉴">≡</FabMenu>
-<<<<<<< Updated upstream
-                    <div>중근티비치킨111</div>
-=======
                     <div>중근티비치킨222</div>
->>>>>>> Stashed changes
                 </Content>
             </Hero>
         </Root>
