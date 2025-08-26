@@ -139,4 +139,5 @@ const Home: React.FC = () => {
       </CS.Section>
     </Common.Root>
   );
+}
 export default Home;
