@@ -171,19 +171,52 @@ const Home: React.FC = () => {
                 <Content>
                     <CircleButton title="설정">✧</CircleButton>
 
-                    {/* {!loading && exhibit && (
-            <InfoCard>
-              <Tag>{exhibit.subTitle ?? "Bellarte"}</Tag>
-              <Title>{exhibit.title}</Title>
-              <CTA href={exhibit.detailUrl ?? "#"}>상세보기</CTA>
-              <Meta>{exhibit.period ?? ""}</Meta>
-            </InfoCard>
-          )} */}
-                    <div>aaa3213124124aaa</div>
-                    <FabMenu title="메뉴">≡</FabMenu>
-                </Content>
-            </Hero>
-        </Root>
+                    {!loading && exhibit && (
+                        <HS.InfoCard>
+                            <HS.Tag>{exhibit.subTitle ?? 'Bellarte'}</HS.Tag>
+                            <HS.Title>{exhibit.title}</HS.Title>
+                            <HS.CTA href={exhibit.detailUrl ?? '#'}>
+                                상세보기
+                            </HS.CTA>
+                            <HS.Meta>{exhibit.period ?? ''}</HS.Meta>
+                        </HS.InfoCard>
+                    )}
+
+                    <HS.FabMenu title="메뉴">≡</HS.FabMenu>
+                </HS.Content>
+            </HS.Hero>
+
+            {/* 아래로 스크롤되는 추천 섹션 */}
+            <CS.Section>
+                <CS.SectionTitle>추천 전시</CS.SectionTitle>
+                <CS.Grid>
+                    {kcisaList.map((it) => (
+                        <CS.Card key={it.LOCAL_ID}>
+                            <CS.CardThumb $src={it.IMAGE_OBJECT} />
+                            <CS.CardBody>
+                                <CS.CardTitle>{it.TITLE}</CS.CardTitle>
+                                <CS.CardMeta>
+                                    {it.CNTC_INSTT_NM && (
+                                        <span>기관: {it.CNTC_INSTT_NM}</span>
+                                    )}
+                                    {it.PERIOD && (
+                                        <span>기간: {it.PERIOD}</span>
+                                    )}
+                                    {it.GENRE && <span>장르: {it.GENRE}</span>}
+                                </CS.CardMeta>
+                                <CS.CardLink
+                                    href={it.URL || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    상세보기 ㅈㅈㅈ
+                                </CS.CardLink>
+                            </CS.CardBody>
+                        </CS.Card>
+                    ))}
+                </CS.Grid>
+            </CS.Section>
+        </Common.Root>
     );
 };
 
