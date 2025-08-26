@@ -1,5 +1,7 @@
+// src/components/Header.tsx
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // ✅ 추가
 
 const Bar = styled.header`
   position: fixed;
@@ -7,18 +9,15 @@ const Bar = styled.header`
   left: 0;
   right: 0;
   height: 72px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0 24px;
   z-index: 10;
   backdrop-filter: saturate(140%) blur(4px);
   background: rgba(10, 10, 12, 0.25);
 `;
 
-// 왼쪽 (로고)
 const Left = styled.div`
   display: flex;
   align-items: center;
@@ -26,18 +25,14 @@ const Left = styled.div`
 const Brand = styled.a`
   font-weight: 800;
   font-size: 24px;
-  letter-spacing: 1px;
   color: #fff;
   text-decoration: none;
 `;
 
-// 가운데 (네비게이션)
 const Center = styled.nav`
-  position: absolute; /* 화면 전체 기준 */
-  left: 50%; /* 화면 가로 50% 위치 */
-  transform: translateX(
-    -50%
-  ); /* 자신의 너비 절반만큼 왼쪽 이동 → 정확히 중앙 */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 32px;
 `;
@@ -52,7 +47,6 @@ const NavLink = styled.a`
   }
 `;
 
-// 오른쪽 (버튼들)
 const Right = styled.div`
   display: flex;
   align-items: center;
@@ -75,29 +69,30 @@ const Pill = styled.button`
   }
 `;
 
-const Header: React.FC = () => (
-  <Bar>
-    {/* 좌측 로고 */}
-    <Left>
-      <Brand href="/">BELLARTE</Brand>
-    </Left>
+const Header: React.FC = () => {
+  const navigate = useNavigate(); // ✅ 추가
 
-    {/* 가운데 네비 */}
-    <Center>
-      <NavLink href="#visit">방문안내</NavLink>
-      <NavLink href="#exhibitions">전시</NavLink>
-      <NavLink href="#collection">소장품</NavLink>
-      <NavLink href="#learn">배움·연구</NavLink>
-      <NavLink href="#membership">멤버십</NavLink>
-    </Center>
+  return (
+    <Bar>
+      <Left>
+        <Brand href="/">BELLARTE</Brand>
+      </Left>
 
-    {/* 우측 버튼 */}
-    <Right>
-      <Pill>ENG</Pill>
-      <Pill>로그인</Pill>
-      <Pill>회원가입</Pill>
-    </Right>
-  </Bar>
-);
+      <Center>
+        <NavLink href="#visit">방문안내</NavLink>
+        <NavLink href="#exhibitions">전시</NavLink>
+        <NavLink href="#collection">소장품</NavLink>
+        <NavLink href="#learn">배움·연구</NavLink>
+        <NavLink href="#membership">멤버십</NavLink>
+      </Center>
 
+      <Right>
+        <Pill>ENG</Pill>
+        {/* ✅ 클릭하면 /member/login 으로 이동 */}
+        <Pill onClick={() => navigate("/member/login")}>로그인</Pill>
+        <Pill>회원가입</Pill>
+      </Right>
+    </Bar>
+  );
+};
 export default Header;

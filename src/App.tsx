@@ -1,15 +1,11 @@
-import React from "react";
-import Header from "./components/Header";
-import Home from "./pages/Home";
-import "./global.css"; // 아래 6) 참고 (선택)
+import { BrowserRouter } from "react-router-dom";
+import Router from "./routes/Router";
 
 function App() {
   return (
-    <>
-      <Header />
-      <Home />
-    </>
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
   );
 }
-
 export default App;
