@@ -111,10 +111,17 @@ function classifyCategory(it: Item): "현대미술" | "고미술" | "기타" {
 export default function Collection() {
   const [data, setData] = useState<WithCategory[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const API_KEY = "744becef-9f7d-4b8a-b3e2-b271b67eb18a";
   useEffect(() => {
-    axios
-      .get<Item[]>("/api/relics", { params: { pageNo: 1, numOfRows: 20, keyword: "" } })
+     axios.get<Item[]>("https://api.kcisa.kr/openapi/service/rest/meta/MPKreli", {
+  params: {
+    serviceKey: API_KEY,
+    numOfRows: 100,
+    pageNo: 1,
+    keyword: "",   // 빈 값이라도 반드시 넣기
+    resultType: "json", 
+  },
+})
       .then((res) => {
         const mapped = (res.data || []).map((it) => ({
           ...it,
