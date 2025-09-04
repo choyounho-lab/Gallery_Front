@@ -4,6 +4,10 @@ import Layout from "../layout/Layout";
 import Home from "../pages/Home";
 import Login from "../member/Login";
 import Collection from "../pages/Collection";
+
+
+
+
 function Router() {
   return (
     <Routes>
@@ -12,7 +16,7 @@ function Router() {
 
         {/* 로그인 */}
         <Route path="member/login" element={<Login />} />
-          <Route path="/collection" element={<Collection />} />
+          <Route path="collection" element={<Collection />} />
       </Route>
    
     </Routes>
