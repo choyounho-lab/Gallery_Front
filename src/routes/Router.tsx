@@ -10,16 +10,20 @@ import Collection from "../pages/Collection";
 
 function Router() {
   return (
+    <>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
 
         {/* 로그인 */}
         <Route path="member/login" element={<Login />} />
-          <Route path="collection" element={<Collection />} />
+           <Route path="collection" element={<Collection />} />
       </Route>
-   
+  
     </Routes>
+
+    
+    </>
   );
 }
 export default Router;

@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom"; // ✅ 추가
+import styled from "styled-components";
 
 const Bar = styled.header`
   position: fixed;
