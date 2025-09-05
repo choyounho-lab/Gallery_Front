@@ -29,12 +29,6 @@ export const Hero = styled.section<{ $bg?: string }>`
 export const OverlayShade = styled.div`
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-      90% 55% at 70% 40%,
-      rgba(0, 0, 0, 0.05) 0%,
-      rgba(0, 0, 0, 0.55) 100%
-    ),
-    linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%);
 `;
 
 export const Content = styled.div`

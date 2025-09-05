@@ -16,6 +16,7 @@ const Layout = () => {
   return (
     <LayoutWrapper bg={themeColors.bg} color={themeColors.color}>
       <Header />
+      <main className="pt-16"></main>
       <Outlet />
     </LayoutWrapper>
   );
