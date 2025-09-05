@@ -101,7 +101,7 @@ const Collection: React.FC = () => {
               onClick={() => { setCategory(c.key as Category); setPageNo(1); }}
               className={
                 "px-3 py-1 rounded-full border text-sm " +
-                (active ? "bg-black text-white border-black" : "bg-white text-gray-800 hover:bg-gray-100")
+                (active ? "bg-black text-white border-black" : "bg-black text-white border-black")
               }
             >
               {c.label}
