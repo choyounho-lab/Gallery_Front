@@ -24,8 +24,7 @@ const Left = styled.div`
 `;
 const Brand = styled.a`
   font-weight: 800;
-  font-size: 24px;
-  color: #fff;
+  font-size: 1.5rem;
   text-decoration: none;
 `;
 
@@ -37,9 +36,8 @@ const Center = styled.nav`
   gap: 32px;
 `;
 const NavLink = styled.a`
-  color: #eaeaea;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 1rem;
   text-decoration: none;
   transition: opacity 0.2s;
   &:hover {
@@ -56,11 +54,10 @@ const Pill = styled.button`
   height: 36px;
   padding: 0 12px;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid ${({ theme }) => theme.color};
   background: rgba(255, 255, 255, 0.08);
-  color: #fff;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: 0.2s;
   &:hover {
