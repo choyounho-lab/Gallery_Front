@@ -81,7 +81,7 @@ const Header: React.FC = () => {
       <Center>
         <NavLink href="#visit">방문안내</NavLink>
         <NavLink href="#exhibitions">전시</NavLink>
-        <NavLink href="#collection">소장품</NavLink>
+        <NavLink href="collection">소장품</NavLink>
         <NavLink href="#learn">배움·연구</NavLink>
         <NavLink href="#membership">멤버십</NavLink>
       </Center>
