@@ -1,5 +1,11 @@
 // src/style/home/Hero.styles.ts
 import styled from "styled-components";
+import { themes } from "../../contexts/SettingsContext";
+
+type ThemeKeys = keyof typeof themes;
+interface InfoCardProps {
+  $theme: keyof typeof themes;
+}
 
 export const Hero = styled.section<{ $bg?: string }>`
   position: relative;
@@ -23,12 +29,6 @@ export const Hero = styled.section<{ $bg?: string }>`
 export const OverlayShade = styled.div`
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-      90% 55% at 70% 40%,
-      rgba(0, 0, 0, 0.05) 0%,
-      rgba(0, 0, 0, 0.55) 100%
-    ),
-    linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%);
 `;
 
 export const Content = styled.div`
@@ -36,7 +36,7 @@ export const Content = styled.div`
   height: calc(100vh - 72px);
 `;
 
-export const InfoCard = styled.div`
+export const InfoCard = styled.div<InfoCardProps>`
   position: absolute;
   left: 24px;
   right: 24px;
@@ -44,14 +44,14 @@ export const InfoCard = styled.div`
   width: min(560px, 92vw);
   padding: 24px;
   border-radius: 14px;
-  background: rgba(10, 10, 12, 0.6);
+  background: ${({ $theme }) => themes[$theme].bg};
   border: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(6px);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 `;
 
 export const Tag = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 700;
   opacity: 0.9;
   margin-bottom: 10px;
@@ -59,12 +59,12 @@ export const Tag = styled.div`
 
 export const Title = styled.h1`
   margin: 0 0 10px;
-  font-size: clamp(26px, 4vw, 36px);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 800;
 `;
 
 export const Meta = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   opacity: 0.9;
   margin-top: 8px;
 `;
@@ -79,19 +79,20 @@ export const CTA = styled.a`
   border-radius: 21px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 14px;
-  color: #0b0c10;
-  background: #fff;
-  border: 1px solid #fff;
+  font-size: 0.875rem;
+  color: ${({ theme }) => theme.color};
+  background: ${({ theme }) => theme.bg};
+  border: 1px solid ${({ theme }) => theme.color};
   transition: 0.2s;
   &:hover {
+    background: gray;
     transform: translateY(-1px);
     box-shadow: 0 6px 14px rgba(255, 255, 255, 0.15);
   }
 `;
-
 export const CircleButton = styled.button`
-  position: absolute;
+  z-index: 3000;
+  position: fixed;
   left: 24px;
   top: 50%;
   transform: translateY(-50%);
@@ -99,14 +100,14 @@ export const CircleButton = styled.button`
   height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: gray;
+  color: black;
   font-weight: 800;
   cursor: pointer;
   backdrop-filter: blur(4px);
   transition: 0.2s;
   &:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: #a9a9a9; // lightgray
     border-color: rgba(255, 255, 255, 0.32);
     transform: translateY(-50%) scale(1.04);
   }
@@ -125,7 +126,7 @@ export const FabMenu = styled.button`
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  font-size: 22px;
+  font-size: 1.25rem;
   font-weight: 900;
   cursor: pointer;
   transition: 0.2s;

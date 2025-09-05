@@ -10,7 +10,7 @@ export const Section = styled.section`
 `;
 
 export const SectionTitle = styled.h2`
-  font-size: clamp(20px, 2.2vw, 28px);
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
   font-weight: 800;
   margin: 0 0 20px;
 `;
@@ -18,7 +18,7 @@ export const SectionTitle = styled.h2`
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  gap: 1.25rem;
   @media (max-width: 1100px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -29,7 +29,7 @@ export const Grid = styled.div`
 
 export const Card = styled.article`
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   overflow: hidden;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;
@@ -52,15 +52,14 @@ export const CardBody = styled.div`
   padding: 14px 14px 16px;
 `;
 
-export const CardTitle = styled.h3`
-  font-size: 16px;
-  margin: 0 0 8px;
-  font-weight: 700;
-  line-height: 1.35;
+export const CardTitle = styled.h3<{ themeMode: string }>`
+  font-size: 1rem;
+  color: ${({ themeMode }) =>
+    themeMode === "dark" || themeMode === "contrast" ? "#fff" : "#333"};
 `;
 
 export const CardMeta = styled.div`
-  font-size: 13px;
+  font-size: 0.875rem;
   opacity: 0.85;
   display: flex;
   flex-direction: column;
@@ -70,7 +69,7 @@ export const CardMeta = styled.div`
 export const CardLink = styled.a`
   display: inline-flex;
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 700;
   color: #00eaff;
   text-decoration: none;
