@@ -11,6 +11,8 @@ import { Sidebar } from "../components/Sidebar/Sidebar";
 
 const Home: React.FC = () => {
   const [exhibit, setExhibit] = useState<FeaturedExhibit | null>(null);
+  const [exhibits, setExhibits] = useState<FeaturedExhibit[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [kcisaList, setKcisaList] = useState<Exhibition[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
