@@ -111,7 +111,6 @@ const Home: React.FC = () => {
                 </HS.Content>
             </HS.Hero>
 
-<<<<<<< Updated upstream
       {/* 아래로 스크롤되는 추천 섹션 */}
       <CS.Section>
         <CS.SectionTitle>추천 전시</CS.SectionTitle>
@@ -141,31 +140,4 @@ const Home: React.FC = () => {
     </Common.Root>
   );
 }
-=======
-            {/* 기관별 전시 */}
-            {Object.entries(byOrg).map(([org, list]) => (
-                <CS.Section key={org}>
-                    <CS.SectionTitle>{org}</CS.SectionTitle>
-                    <CS.Grid>
-                        {list.map((it) => (
-                            <ExhibitCard key={it.LOCAL_ID} item={it} />
-                        ))}
-                    </CS.Grid>
-                </CS.Section>
-            ))}
-
-            {/* 오늘의 추천 전시 */}
-            <CS.Section>
-                <CS.SectionTitle>오늘의 추천 전시</CS.SectionTitle>
-                <CS.Grid>
-                    {recommended.map((it) => (
-                        <ExhibitCard key={it.LOCAL_ID} item={it} />
-                    ))}
-                </CS.Grid>
-            </CS.Section>
-        </Common.Root>
-    );
-};
-
->>>>>>> Stashed changes
 export default Home;
