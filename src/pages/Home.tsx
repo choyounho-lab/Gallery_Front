@@ -14,52 +14,26 @@ const Home: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [kcisaList, setKcisaList] = useState<Exhibition[]>([]);
 
-    // ===== 히어로 데이터: 백엔드 → KCISA → 임시 =====
+    // ===== Hero 데이터 =====
     useEffect(() => {
         const controller = new AbortController();
 
         (async () => {
             try {
-                // 1) 백엔드 추천 히어로 (여러 개라고 가정)
                 const res = await instance.get<FeaturedExhibit[]>(
                     '/api/home/featured',
-                    {
-                        signal: controller.signal,
-                    }
+                    { signal: controller.signal }
                 );
                 setExhibits(res.data);
             } catch {
                 try {
-                    // 2) KCISA 1건 폴백
                     const items = await fetchKcisaItems(
                         1,
-                        30,
+                        100,
                         controller.signal
-                    ); // 30건 정도 가져오기
+                    );
                     if (items.length > 0) {
                         setExhibits(items.map((it) => toFeaturedExhibit(it)));
-                    } else {
-                        // 3) 최종 임시
-                        setExhibits([
-                            {
-                                id: 1,
-                                title: '현대미술 소장품',
-                                subTitle: 'M2',
-                                period: '2025.02.27. –',
-                                heroImage:
-                                    'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2069&auto=format&fit=crop',
-                                detailUrl: '#',
-                            },
-                            {
-                                id: 2,
-                                title: '특별전: 한국 현대미술',
-                                subTitle: 'MMCA',
-                                period: '2025.03.10. –',
-                                heroImage:
-                                    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2069&auto=format&fit=crop',
-                                detailUrl: '#',
-                            },
-                        ]);
                     }
                 } catch {
                     setExhibits([
@@ -87,17 +61,41 @@ const Home: React.FC = () => {
         if (exhibits.length === 0) return;
         const timer = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % exhibits.length);
-        }, 10000); // 5초마다 전환
+        }, 5000);
         return () => clearInterval(timer);
     }, [exhibits]);
 
-    // ===== 추천 그리드: KCISA 다건 =====
+    // ===== 카드 컴포넌트 =====
+    const ExhibitCard: React.FC<{ item: Exhibition }> = ({ item }) => (
+        <CS.Card>
+            <CS.CardThumb $src={item.IMAGE_OBJECT} />
+            <CS.CardBody>
+                <CS.CardTitle>{item.TITLE}</CS.CardTitle>
+                <CS.CardMeta>
+                    {item.CNTC_INSTT_NM && (
+                        <span>기관: {item.CNTC_INSTT_NM}</span>
+                    )}
+                    {item.PERIOD && <span>기간: {item.PERIOD}</span>}
+                    {item.GENRE && <span>장르: {item.GENRE}</span>}
+                </CS.CardMeta>
+                <CS.CardLink
+                    href={item.URL || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    상세보기
+                </CS.CardLink>
+            </CS.CardBody>
+        </CS.Card>
+    );
+
+    // ===== KCISA 데이터 =====
     useEffect(() => {
         const controller = new AbortController();
 
         (async () => {
             try {
-                const items = await fetchKcisaItems(1, 30, controller.signal);
+                const items = await fetchKcisaItems(1, 8, controller.signal); // 넉넉히 가져오기
                 setKcisaList(items);
             } catch {
                 setKcisaList([]);
@@ -108,15 +106,52 @@ const Home: React.FC = () => {
     }, []);
 
     const currentExhibit = exhibits[currentIndex];
+    const now = new Date();
+
+    // ===== KCISA 분류 =====
+    const ongoing = kcisaList.filter((it) => {
+        if (!it.PERIOD) return false;
+        const [startStr, endStr] = it.PERIOD.split('–').map((s) => s.trim());
+        if (!startStr) return false;
+        const start = new Date(startStr.replace(/\./g, '-'));
+        if (!endStr) {
+            // 종료일 없으면 → 현재 진행 중으로 간주
+            return start <= now;
+        }
+        const end = new Date(endStr.replace(/\./g, '-'));
+        return start <= now && now <= end;
+    });
+
+    const upcoming = kcisaList.filter((it) => {
+        if (!it.PERIOD) return false;
+        const [startStr] = it.PERIOD.split('–').map((s) => s.trim());
+        if (!startStr) return false;
+        const start = new Date(startStr.replace(/\./g, '-'));
+        return start > now;
+    });
+
+    const byGenre: Record<string, Exhibition[]> = {};
+    kcisaList.forEach((it) => {
+        if (!it.GENRE) return;
+        if (!byGenre[it.GENRE]) byGenre[it.GENRE] = [];
+        byGenre[it.GENRE].push(it);
+    });
+
+    const byOrg: Record<string, Exhibition[]> = {};
+    kcisaList.forEach((it) => {
+        if (!it.CNTC_INSTT_NM) return;
+        if (!byOrg[it.CNTC_INSTT_NM]) byOrg[it.CNTC_INSTT_NM] = [];
+        byOrg[it.CNTC_INSTT_NM].push(it);
+    });
+
+    const recommended = kcisaList.sort(() => Math.random() - 0.5).slice(0, 8);
 
     return (
         <Common.Root>
-            {/* 히어로 */}
+            {/* Hero */}
             <HS.Hero $bg={currentExhibit?.heroImage}>
                 <HS.OverlayShade />
                 <HS.Content>
-                    <HS.CircleButton title="설정">✧</HS.CircleButton>
-
                     {!loading && currentExhibit && (
                         <HS.InfoCard>
                             <HS.Tag>
@@ -129,38 +164,27 @@ const Home: React.FC = () => {
                             <HS.Meta>{currentExhibit.period ?? ''}</HS.Meta>
                         </HS.InfoCard>
                     )}
-
-                    <HS.FabMenu title="메뉴">≡</HS.FabMenu>
                 </HS.Content>
             </HS.Hero>
 
-            {/* 아래로 스크롤되는 추천 섹션 */}
+            {/* 기관별 전시 */}
+            {Object.entries(byOrg).map(([org, list]) => (
+                <CS.Section key={org}>
+                    <CS.SectionTitle>{org}</CS.SectionTitle>
+                    <CS.Grid>
+                        {list.map((it) => (
+                            <ExhibitCard key={it.LOCAL_ID} item={it} />
+                        ))}
+                    </CS.Grid>
+                </CS.Section>
+            ))}
+
+            {/* 오늘의 추천 전시 */}
             <CS.Section>
-                <CS.SectionTitle>추천 전시</CS.SectionTitle>
+                <CS.SectionTitle>오늘의 추천 전시</CS.SectionTitle>
                 <CS.Grid>
-                    {kcisaList.map((it) => (
-                        <CS.Card key={it.LOCAL_ID}>
-                            <CS.CardThumb $src={it.IMAGE_OBJECT} />
-                            <CS.CardBody>
-                                <CS.CardTitle>{it.TITLE}</CS.CardTitle>
-                                <CS.CardMeta>
-                                    {it.CNTC_INSTT_NM && (
-                                        <span>기관: {it.CNTC_INSTT_NM}</span>
-                                    )}
-                                    {it.PERIOD && (
-                                        <span>기간: {it.PERIOD}</span>
-                                    )}
-                                    {it.GENRE && <span>장르: {it.GENRE}</span>}
-                                </CS.CardMeta>
-                                <CS.CardLink
-                                    href={it.URL || '#'}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    상세보기
-                                </CS.CardLink>
-                            </CS.CardBody>
-                        </CS.Card>
+                    {recommended.map((it) => (
+                        <ExhibitCard key={it.LOCAL_ID} item={it} />
                     ))}
                 </CS.Grid>
             </CS.Section>
