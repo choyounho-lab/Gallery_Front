@@ -167,29 +167,37 @@ const Home: React.FC = () => {
                 </HS.Content>
             </HS.Hero>
 
-            {/* 기관별 전시 */}
-            {Object.entries(byOrg).map(([org, list]) => (
-                <CS.Section key={org}>
-                    <CS.SectionTitle>{org}</CS.SectionTitle>
-                    <CS.Grid>
-                        {list.map((it) => (
-                            <ExhibitCard key={it.LOCAL_ID} item={it} />
-                        ))}
-                    </CS.Grid>
-                </CS.Section>
-            ))}
-
-            {/* 오늘의 추천 전시 */}
+            {/* 아래로 스크롤되는 추천 섹션 */}
             <CS.Section>
-                <CS.SectionTitle>오늘의 추천 전시</CS.SectionTitle>
+                <CS.SectionTitle>추천 전시</CS.SectionTitle>
                 <CS.Grid>
-                    {recommended.map((it) => (
-                        <ExhibitCard key={it.LOCAL_ID} item={it} />
+                    {kcisaList.map((it) => (
+                        <CS.Card key={it.LOCAL_ID}>
+                            <CS.CardThumb $src={it.IMAGE_OBJECT} />
+                            <CS.CardBody>
+                                <CS.CardTitle>{it.TITLE}</CS.CardTitle>
+                                <CS.CardMeta>
+                                    {it.CNTC_INSTT_NM && (
+                                        <span>기관: {it.CNTC_INSTT_NM}</span>
+                                    )}
+                                    {it.PERIOD && (
+                                        <span>기간: {it.PERIOD}</span>
+                                    )}
+                                    {it.GENRE && <span>장르: {it.GENRE}</span>}
+                                </CS.CardMeta>
+                                <CS.CardLink
+                                    href={it.URL || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    상세보기1
+                                </CS.CardLink>
+                            </CS.CardBody>
+                        </CS.Card>
                     ))}
                 </CS.Grid>
             </CS.Section>
         </Common.Root>
     );
 };
-
 export default Home;
