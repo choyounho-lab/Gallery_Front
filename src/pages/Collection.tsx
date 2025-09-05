@@ -102,7 +102,6 @@ const Collection: React.FC = () => {
               className={
                 "px-3 py-1 rounded-full border text-sm " +
                 (active ? "bg-black text-white border-black" : "bg-black text-white border-black")
-                (active ? "bg-black text-white border-black" : "bg-black text-white border-black")
               }
             >
               {c.label}
