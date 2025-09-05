@@ -5,6 +5,7 @@ const Layout = () => {
   return (
     <>
       <Header />
+      <main className="pt-16"></main>
       <Outlet />
     </>
   );
