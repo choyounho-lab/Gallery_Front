@@ -4,6 +4,6 @@ import styled from 'styled-components';
 export const Root = styled.main`
     position: relative;
     min-height: 100vh;
-    color: #080000ff;
+    color: #0c0b0bff;
     background: #c8b0b3c2;
 `;
