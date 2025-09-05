@@ -91,7 +91,8 @@ export const CTA = styled.a`
   }
 `;
 export const CircleButton = styled.button`
-  position: absolute;
+  z-index: 3000;
+  position: fixed;
   left: 24px;
   top: 50%;
   transform: translateY(-50%);
@@ -99,14 +100,14 @@ export const CircleButton = styled.button`
   height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: gray;
+  color: black;
   font-weight: 800;
   cursor: pointer;
   backdrop-filter: blur(4px);
   transition: 0.2s;
   &:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: #a9a9a9; // lightgray
     border-color: rgba(255, 255, 255, 0.32);
     transform: translateY(-50%) scale(1.04);
   }
@@ -125,7 +126,7 @@ export const FabMenu = styled.button`
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  font-size: 22px;
+  font-size: 1.25rem;
   font-weight: 900;
   cursor: pointer;
   transition: 0.2s;
