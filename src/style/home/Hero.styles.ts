@@ -29,12 +29,6 @@ export const Hero = styled.section<{ $bg?: string }>`
 export const OverlayShade = styled.div`
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-      90% 55% at 70% 40%,
-      rgba(0, 0, 0, 0.05) 0%,
-      rgba(0, 0, 0, 0.55) 100%
-    ),
-    linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%);
 `;
 
 export const Content = styled.div`
@@ -97,8 +91,7 @@ export const CTA = styled.a`
   }
 `;
 export const CircleButton = styled.button`
-  z-index: 3000;
-  position: fixed;
+  position: absolute;
   left: 24px;
   top: 50%;
   transform: translateY(-50%);
@@ -106,14 +99,14 @@ export const CircleButton = styled.button`
   height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: gray;
-  color: black;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
   font-weight: 800;
   cursor: pointer;
   backdrop-filter: blur(4px);
   transition: 0.2s;
   &:hover {
-    background: #a9a9a9; // lightgray
+    background: rgba(255, 255, 255, 0.18);
     border-color: rgba(255, 255, 255, 0.32);
     transform: translateY(-50%) scale(1.04);
   }
@@ -132,7 +125,7 @@ export const FabMenu = styled.button`
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  font-size: 1.25rem;
+  font-size: 22px;
   font-weight: 900;
   cursor: pointer;
   transition: 0.2s;
