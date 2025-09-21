@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { getRelicList, RelicItem, Category } from "../api/emuseum";
 
+
 /** 화면 표시용 간단 분류(라벨만) */
 function prettyCategory(it: RelicItem): string {
   const hay = [
@@ -18,6 +19,7 @@ const Collection: React.FC = () => {
   const [items, setItems] = useState<RelicItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+  
 
   // 검색어 입력(q)와 확정(keyword)
   const [q, setQ] = useState("");
@@ -54,6 +56,8 @@ const Collection: React.FC = () => {
     setKeyword(k.length ? k : undefined);
     setPageNo(1);
   }, [q]);
+  
+  
 
   // 데이터 로드 (검색어/카테고리/페이지 바뀔 때)
   useEffect(() => {
@@ -133,7 +137,7 @@ const Collection: React.FC = () => {
 
       {!loading && !err && (
         <>
-          <ul className="space-y-3 mb-4">
+          <ul className="space-y-3 mb-4" >
             {items.map((it, idx) => (
               <li key={idx} className="border rounded p-3">
                 <div className="flex gap-3">
