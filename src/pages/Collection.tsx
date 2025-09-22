@@ -22,6 +22,7 @@ const Collection: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
    const navigate = useNavigate(); 
+   
   
 
   // 검색어 입력(q)와 확정(keyword)
