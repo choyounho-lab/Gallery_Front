@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import Admin from "../pages/Admin";
 import Login from "../member/Login";
 import Collection from "../pages/Collection";
+import RelicDetailPage from "../pages/RelicDetailPage";
 
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       </Route>
 <Route path="member/login" element={<Login />} />
       <Route path="collection" element={<Collection />} />
+      <Route path="/detail/:id" element={<RelicDetailPage />} />
       {/* 어드민 */}
         <Route path="admin" element={<Admin />} />
     </Routes>

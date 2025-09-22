@@ -49,7 +49,7 @@ function normalizeImg(u?: string): string | undefined {
 /** 원본 → 화면용 매핑 */
 function mapRawToRelicItem(r: any): RelicItem {
   return {
-    ...r, // ⬅️ 먼저 펼치고
+    ...r, // ⬅ 먼저 펼치고
     title: r?.nameKr || r?.name || r?.title || "(제목 없음)", // 우리가 보정한 값이 최종 반영되게
     description: [r?.museumName2, r?.museumName3].filter(Boolean).join(" "),
     medium: r?.materialCode,
