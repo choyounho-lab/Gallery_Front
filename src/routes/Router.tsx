@@ -4,18 +4,20 @@ import Layout from "../layout/Layout";
 import Home from "../pages/Home";
 import Login from "../member/Login";
 import Collection from "../pages/Collection";
-import Home2 from "../pages/Home2";
+import ExhibitionPage from "../pages/ExhibitionPage";
 
 function Router() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home2 />} />
-
+          <Route index element={<Home />} />
           {/* 로그인 */}
           <Route path="member/login" element={<Login />} />
           <Route path="collection" element={<Collection />} />
+
+          {/* 전시 페이지 */}
+          <Route path="exhibition/:type" element={<ExhibitionPage />} />
         </Route>
       </Routes>
     </>
