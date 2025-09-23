@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { instance } from "../api/instance"; // 경로 확인
+import { Sidebar } from "../components/Sidebar/Sidebar";
+import * as HS from "../style/home/Hero.styles";
 
 const Page = styled.div`
   min-height: 100vh;
@@ -90,6 +92,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,9 +117,14 @@ const Login: React.FC = () => {
       setPending(false);
     }
   };
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
     <Page>
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <HS.CircleButton title="설정" onClick={toggleSidebar}>
+        ✧
+      </HS.CircleButton>
       <Card>
         <Title>로그인</Title>
         <form onSubmit={onSubmit}>

@@ -1,19 +1,56 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
+import { useSearchParams } from "react-router-dom";
 import { getRelicList, RelicItem, Category } from "../api/emuseum";
 import { useNavigate } from "react-router-dom";
 
+
+import { Sidebar } from "../components/Sidebar/Sidebar";
+import * as HS from "../style/home/Hero.styles";
+import * as CS from "../style/home/Card.styles";
+import { themes, useSettings } from "../contexts/SettingsContext";
+import { FeaturedExhibit, Exhibition } from "../types/ApiType";
 
 
 /** 화면 표시용 간단 분류(라벨만) */
 function prettyCategory(it: RelicItem): string {
   const hay = [
-    it.title, it.description, (it as any).nameKr, (it as any).name,
-    (it as any).indexWord, it.medium, (it as any).materialCode, (it as any).purposeCode,
-  ].filter(Boolean).join("").replace(/\s+/g, "");
+    it.title,
+    it.description,
+    (it as any).nameKr,
+    (it as any).name,
+    (it as any).indexWord,
+    it.medium,
+    (it as any).materialCode,
+    (it as any).purposeCode,
+  ]
+    .filter(Boolean)
+    .join("")
+    .replace(/\s+/g, "");
 
-  if (/(회화|그림|유화|수묵|채색|불화|동양화|서양화|판화|드로잉|스케치|초상|풍경화)/.test(hay)) return "회화(그림)";
-  if (/(도자|도자기|자기|도기|토기|청자|백자|분청|옹기|항아리|사발|주전자|병|접시)/.test(hay)) return "도자기";
-  if (/(서적|책|문서|고문서|간찰|필사본|판본|고서|경전|불경|사경|목판|인쇄)/.test(hay)) return "서적";
+  if (
+    /(회화|그림|유화|수묵|채색|불화|동양화|서양화|판화|드로잉|스케치|초상|풍경화)/.test(
+      hay
+    )
+  )
+    return "회화(그림)";
+  if (
+    /(도자|도자기|자기|도기|토기|청자|백자|분청|옹기|항아리|사발|주전자|병|접시)/.test(
+      hay
+    )
+  )
+    return "도자기";
+  if (
+    /(서적|책|문서|고문서|간찰|필사본|판본|고서|경전|불경|사경|목판|인쇄)/.test(
+      hay
+    )
+  )
+    return "서적";
   return "기타";
 }
 
@@ -25,12 +62,18 @@ const Collection: React.FC = () => {
    
   
 
+  // 사이드바 내용
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [exhibit, setExhibit] = useState<FeaturedExhibit | null>(null);
+  const { theme, fontSize } = useSettings();
+
   // 검색어 입력(q)와 확정(keyword)
   const [q, setQ] = useState("");
   const [keyword, setKeyword] = useState<string | undefined>(undefined);
 
   // 카테고리(서버 재조회에 사용)
   const [category, setCategory] = useState<Category>("ALL");
+  const [searchParams] = useSearchParams();
 
   const [pageNo, setPageNo] = useState(1);
   const [numOfRows] = useState(10);
@@ -86,11 +129,25 @@ const Collection: React.FC = () => {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [pageNo, numOfRows, keyword, category]);
+
+  useEffect(() => {
+    const cat = searchParams.get("category") as Category | null;
+    if (cat) setCategory(cat);
+  }, [searchParams]);
+
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
     <div className="p-4 max-w-5xl mx-auto">
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <HS.CircleButton title="설정" onClick={toggleSidebar}>
+        ✧
+      </HS.CircleButton>
+
       <h1 className="text-xl font-bold mb-2">소장품 목록</h1>
 
       {/* 카테고리 탭 (클릭 시 서버 재조회) */}
@@ -107,10 +164,15 @@ const Collection: React.FC = () => {
           return (
             <button
               key={c.key}
-              onClick={() => { setCategory(c.key as Category); setPageNo(1); }}
+              onClick={() => {
+                setCategory(c.key as Category);
+                setPageNo(1);
+              }}
               className={
                 "px-3 py-1 rounded-full border text-sm " +
-                (active ? "bg-black text-white border-black" : "bg-black text-white border-black")
+                (active
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-gray-800 hover:bg-gray-100")
               }
             >
               {c.label}
@@ -120,7 +182,8 @@ const Collection: React.FC = () => {
       </div>
 
       <div className="text-sm text-gray-600 mb-4">
-        총 <b>{totalCount}</b>건 {keyword ? `(검색어: “${keyword}”)` : ""} · 현재 페이지 표시: <b>{items.length}</b>건
+        총 <b>{totalCount}</b>건 {keyword ? `(검색어: “${keyword}”)` : ""} ·
+        현재 페이지 표시: <b>{items.length}</b>건
       </div>
 
       {/* 검색 */}
@@ -132,7 +195,11 @@ const Collection: React.FC = () => {
           placeholder="소장품들을 검색해보세요."
           className="border px-3 py-2 rounded w-full"
         />
-        <button onClick={runSearch} className="border px-4 py-2 rounded" title="검색">
+        <button
+          onClick={runSearch}
+          className="border px-4 py-2 rounded"
+          title="검색"
+        >
           검색
         </button>
       </div>
@@ -159,13 +226,19 @@ const Collection: React.FC = () => {
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{it.title || "(제목 없음)"}</div>
-                    <div className="text-xs text-gray-500 mb-1">카테고리: {prettyCategory(it)}</div>
+                    <div className="font-medium truncate">
+                      {it.title || "(제목 없음)"}
+                    </div>
+                    <div className="text-xs text-gray-500 mb-1">
+                      카테고리: {prettyCategory(it)}
+                    </div>
                     <div className="text-sm text-gray-600">
-                      {(it.temporal || "-")} · {(it.medium || "-")}
+                      {it.temporal || "-"} · {it.medium || "-"}
                     </div>
                     {it.description && (
-                      <p className="mt-1 text-sm leading-relaxed line-clamp-3">{it.description}</p>
+                      <p className="mt-1 text-sm leading-relaxed line-clamp-3">
+                        {it.description}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -182,7 +255,10 @@ const Collection: React.FC = () => {
             >
               이전
             </button>
-            <span className="text-sm">{pageNo} / {totalPages}</span>
+            <span className="text-sm">
+              {pageNo} / {totalPages}
+            </span>
+
             <button
               className="border px-3 py-1 rounded disabled:opacity-50"
               onClick={() => setPageNo((p) => Math.min(totalPages, p + 1))}
