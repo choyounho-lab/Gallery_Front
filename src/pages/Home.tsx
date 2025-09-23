@@ -1,7 +1,8 @@
+// src/pages/Home.tsx
 import React, { useEffect, useState } from 'react';
 import { Exhibition, FeaturedExhibit } from '../types/ApiType';
 import { fetchKcisaItems, toFeaturedExhibit } from '../api/kcisa';
-import { dummyKcisaList } from '../api/dummyData'; // ✅ 더미 데이터 import123123
+import { dummyKcisaList } from '../api/dummyData'; // 더미 데이터 import
 import { themes, useSettings } from '../contexts/SettingsContext';
 
 import * as Common from '../style/home/Common.styles';
@@ -18,72 +19,78 @@ const Home: React.FC = () => {
 
     const { theme, fontSize } = useSettings();
 
-    // ===== 히어로 데이터: 백엔드 → KCISA → 임시 =====
+    // ===== KCISA 데이터 (서버 프록시 사용) =====
     useEffect(() => {
-        const controller = new AbortController();
         (async () => {
             try {
-                const res = await instance.get<FeaturedExhibit>(
-                    '/api/home/featured',
-                    {
-                        signal: controller.signal,
-                    }
-                );
-                setExhibit(res.data);
-            } catch {
-                try {
-                    const items = await fetchKcisaItems(
-                        1,
-                        1,
-                        controller.signal
-                    );
-                    if (items.length > 0)
-                        setExhibit(toFeaturedExhibit(items[0]));
-                    else {
-                        setExhibit({
-                            id: 1,
-                            title: '현대미술 소장품',
-                            subTitle: 'M2',
-                            period: '2025.02.27. –',
-                            heroImage:
-                                'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2069&auto=format&fit=crop',
-                            detailUrl: '#',
-                        });
-                    }
-                } catch {
-                    setExhibit({
-                        id: 1,
-                        title: '현대미술 소장품',
-                        subTitle: 'M2',
-                        period: '2025.02.27. –',
-                        heroImage:
-                            'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2069&auto=format&fit=crop',
-                        detailUrl: '#',
-                    });
+                const items = await fetchKcisaItems(1, 20); // 프록시 서버 호출
+                console.log('⭐ KCISA 응답:', items);
+                setKcisaList(items);
+
+                // 메인 Hero에 들어갈 데이터도 KCISA에서 가져오기
+                if (items.length > 0) {
+                    setExhibits(items.slice(0, 5).map(toFeaturedExhibit));
                 }
+            } catch (err) {
+                console.error('❗ KCISA 데이터 가져오기 실패:', err);
+                // API 실패 시 dummyKcisaList 사용
+                setKcisaList(dummyKcisaList);
+                setExhibits(dummyKcisaList.slice(0, 5).map(toFeaturedExhibit));
             } finally {
                 setLoading(false);
             }
         })();
-        return () => controller.abort();
     }, []);
 
-    // ===== 추천 그리드: KCISA 다건 =====
+    // ===== Hero 자동 슬라이드 =====
     useEffect(() => {
-        const controller = new AbortController();
-        (async () => {
-            try {
-                const items = await fetchKcisaItems(1, 8, controller.signal);
-                setKcisaList(items);
-            } catch {
-                setKcisaList([]);
-            }
-        })();
-        return () => controller.abort();
-    }, []);
+        if (exhibits.length === 0) return;
+        const timer = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % exhibits.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [exhibits]);
+
+    // ===== 카드 컴포넌트1 =====
+    const ExhibitCard: React.FC<{ item: Exhibition }> = ({ item }) => (
+        <CS.Card>
+            <CS.CardThumb $src={item.IMAGE_OBJECT} />
+            <CS.CardBody>
+                <CS.CardTitle themeMode={theme}>{item.TITLE}</CS.CardTitle>
+                <CS.CardMeta>
+                    {item.CNTC_INSTT_NM && (
+                        <span>기관: {item.CNTC_INSTT_NM}</span>
+                    )}
+                    {item.PERIOD && <span>기간: {item.PERIOD}</span>}
+                    {item.GENRE && <span>장르: {item.GENRE}</span>}
+                </CS.CardMeta>
+                <CS.CardLink
+                    href={item.URL || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    자세히 보기
+                </CS.CardLink>
+            </CS.CardBody>
+        </CS.Card>
+    );
+
+    const currentExhibit = exhibits[currentIndex];
+
+    // ===== KCISA 분류 =====
+    const byOrg: Record<string, Exhibition[]> = {};
+    kcisaList.forEach((it) => {
+        if (!it.CNTC_INSTT_NM) return;
+        if (!byOrg[it.CNTC_INSTT_NM]) byOrg[it.CNTC_INSTT_NM] = [];
+        byOrg[it.CNTC_INSTT_NM].push(it);
+    });
+
+    const recommended = [...kcisaList]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 8);
 
     const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-    console.log('InfoCard theme:', theme);
+
     return (
         <Common.Root>
             <Sidebar
@@ -96,7 +103,7 @@ const Home: React.FC = () => {
                 <HS.OverlayShade />
                 <HS.Content>
                     <HS.CircleButton title="설정" onClick={toggleSidebar}>
-                        ✧
+                        ⚙️
                     </HS.CircleButton>
 
                     {!loading && currentExhibit && (
@@ -106,7 +113,7 @@ const Home: React.FC = () => {
                             </HS.Tag>
                             <HS.Title>{currentExhibit.title}</HS.Title>
                             <HS.CTA href={currentExhibit.detailUrl ?? '#'}>
-                                상세보기
+                                자세히 보기
                             </HS.CTA>
                             <HS.Meta>{currentExhibit.period ?? ''}</HS.Meta>
                         </HS.InfoCard>
