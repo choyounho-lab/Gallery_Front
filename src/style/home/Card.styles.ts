@@ -29,7 +29,7 @@ export const Grid = styled.div`
 
 export const Card = styled.article`
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 10px solid rgba(226, 18, 18, 0.1);
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;

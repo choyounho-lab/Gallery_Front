@@ -1,21 +1,21 @@
-import React, { ReactNode } from "react";
-import { createGlobalStyle } from "styled-components";
-import { useSettings, themes } from "../contexts/SettingsContext";
+import React, { ReactNode } from 'react';
+import { createGlobalStyle } from 'styled-components';
+import { useSettings, themes } from '../contexts/SettingsContext';
 
 interface Props {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 interface GlobalStyleProps {
-  bg: string;
-  color: string;
-  fontSize: string;
+    bg: string;
+    color: string;
+    fontSize: string;
 }
 
 const GlobalStyle = createGlobalStyle<{
-  fontSize: "small" | "medium" | "large";
-  bg: string;
-  color: string;
+    fontSize: 'small' | 'medium' | 'large';
+    bg: string;
+    color: string;
 }>`
   * {
     color: inherit; /* 모든 요소에 상속 */
@@ -28,22 +28,28 @@ const GlobalStyle = createGlobalStyle<{
   
   html {
     font-size: ${({ fontSize }) =>
-      fontSize === "small"
-        ? "0.75rem"
-        : fontSize === "medium"
-        ? "1rem"
-        : "1.25rem"};
+        fontSize === 'small'
+            ? '0.75rem'
+            : fontSize === 'medium'
+            ? '1rem'
+            : '1.25rem'};
   }
 
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: all 0.3s ease;
-    background-color: transparent; /* #root에서 적용 */
-    color: inherit;
-    min-height: 100%;
-  }
+ body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Pretendard Variable', system-ui, -apple-system,
+               'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI',
+               Roboto, 'Helvetica Neue', Arial, sans-serif;
+  transition: all 0.3s ease;
+  background-color: transparent; /* #root에서 적용 */
+  color: inherit;
+  min-height: 100%;
+  /* 선택: Pretendard Variable이면 400~500이 예쁨 */
+  font-weight: 450;
+  line-height: 1.6;
+}
+
 
   a {
     color: inherit;
@@ -56,17 +62,17 @@ const GlobalStyle = createGlobalStyle<{
 `;
 
 export const GlobalStyleWrapper: React.FC<Props> = ({ children }) => {
-  const { theme, fontSize } = useSettings();
-  const themeColors = themes[theme]; // themes에서 현재 theme 색상 가져오기
-  console.log("테스트: " + theme);
-  return (
-    <>
-      <GlobalStyle
-        fontSize={fontSize}
-        bg={themeColors.bg}
-        color={themeColors.color}
-      />
-      {children}
-    </>
-  );
+    const { theme, fontSize } = useSettings();
+    const themeColors = themes[theme]; // themes에서 현재 theme 색상 가져오기
+    console.log('테스트: ' + theme);
+    return (
+        <>
+            <GlobalStyle
+                fontSize={fontSize}
+                bg={themeColors.bg}
+                color={themeColors.color}
+            />
+            {children}
+        </>
+    );
 };
