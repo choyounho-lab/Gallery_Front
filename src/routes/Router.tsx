@@ -24,10 +24,17 @@ export default function AppRoutes() {
         <Route path="exhibition/:type" element={<ExhibitionPage />} />
         <Route path="collection" element={<Collection />} />
 
-          {/* 전시 페이지 */}
-          <Route path="exhibition/:type" element={<ExhibitionPage />} />
-        </Route>
-      </Routes>
-    </>
+        {/* 유물 상세 (오타 수정 + 파라미터화 + 상대경로) */}
+        <Route path="detail/:id" element={<RelicDetailPage />} />
+
+        {/* 필요 시
+        <Route path="admin" element={<Admin />} />
+        */}
+
+        {/* 404(선택)
+        <Route path="*" element={<NotFound />} />
+        */}
+      </Route>
+    </Routes>
   );
 }
