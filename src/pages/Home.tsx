@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Exhibition, FeaturedExhibit } from "../types/ApiType";
 import { fetchKcisaItems, toFeaturedExhibit } from "../api/kcisa";
-import { dummyKcisaList } from "../api/dummyData"; // ✅ 더미 데이터 import
+import { dummyKcisaList } from "../api/dummyData"; // ✅ 더미 데이터 import123123
 import { themes, useSettings } from "../contexts/SettingsContext";
 
 import * as Common from "../style/home/Common.styles";
