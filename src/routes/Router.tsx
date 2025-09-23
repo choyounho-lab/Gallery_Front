@@ -6,9 +6,8 @@ import Home from "../pages/Home";
 // import Admin from "../pages/Admin"; // 필요 시 사용
 import Login from "../member/Login";
 import Collection from "../pages/Collection";
-import RelicDetailPage from "../pages/RelicDetailPage";
-
 import ExhibitionPage from "../pages/ExhibitionPage";
+import RelicDetailPage from "../pages/RelicDetailPage";
 
 export default function AppRoutes() {
   return (
