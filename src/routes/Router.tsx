@@ -6,8 +6,9 @@ import Home from "../pages/Home";
 // import Admin from "../pages/Admin"; // 필요 시 사용
 import Login from "../member/Login";
 import Collection from "../pages/Collection";
-import ExhibitionPage from "../pages/ExhibitionPage";
 import RelicDetailPage from "../pages/RelicDetailPage";
+
+import ExhibitionPage from "../pages/ExhibitionPage";
 
 export default function AppRoutes() {
   return (
@@ -23,17 +24,10 @@ export default function AppRoutes() {
         <Route path="exhibition/:type" element={<ExhibitionPage />} />
         <Route path="collection" element={<Collection />} />
 
-        {/* 유물 상세 (오타 수정 + 파라미터화 + 상대경로) */}
-        <Route path="detail/:id" element={<RelicDetailPage />} />
-
-        {/* 필요 시
-        <Route path="admin" element={<Admin />} />
-        */}
-
-        {/* 404(선택)
-        <Route path="*" element={<NotFound />} />
-        */}
-      </Route>
-    </Routes>
+          {/* 전시 페이지 */}
+          <Route path="exhibition/:type" element={<ExhibitionPage />} />
+        </Route>
+      </Routes>
+    </>
   );
 }

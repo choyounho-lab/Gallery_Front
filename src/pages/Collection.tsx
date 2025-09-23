@@ -8,6 +8,14 @@ import React, {
 import { getRelicList, RelicItem, Category } from "../api/emuseum";
 import { useNavigate } from "react-router-dom";
 
+
+import { Sidebar } from "../components/Sidebar/Sidebar";
+import * as HS from "../style/home/Hero.styles";
+import * as CS from "../style/home/Card.styles";
+import { themes, useSettings } from "../contexts/SettingsContext";
+import { FeaturedExhibit, Exhibition } from "../types/ApiType";
+
+
 /** 화면 표시용 간단 분류(라벨만) */
 function prettyCategory(it: RelicItem): string {
   const hay = [
@@ -49,7 +57,14 @@ const Collection: React.FC = () => {
   const [items, setItems] = useState<RelicItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const navigate = useNavigate();
+   const navigate = useNavigate(); 
+   
+  
+
+  // 사이드바 내용
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [exhibit, setExhibit] = useState<FeaturedExhibit | null>(null);
+  const { theme, fontSize } = useSettings();
 
   // 검색어 입력(q)와 확정(keyword)
   const [q, setQ] = useState("");
@@ -86,6 +101,8 @@ const Collection: React.FC = () => {
     setKeyword(k.length ? k : undefined);
     setPageNo(1);
   }, [q]);
+  
+  
 
   // 데이터 로드 (검색어/카테고리/페이지 바뀔 때)
   useEffect(() => {
@@ -129,7 +146,7 @@ const Collection: React.FC = () => {
           { key: "ETC", label: "기타" },
         ].map((c) => {
           const active = category === (c.key as Category);
-
+          
           return (
             <button
               key={c.key}
