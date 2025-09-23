@@ -5,17 +5,14 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import { useSearchParams } from "react-router-dom";
 import { getRelicList, RelicItem, Category } from "../api/emuseum";
 import { useNavigate } from "react-router-dom";
-
 
 import { Sidebar } from "../components/Sidebar/Sidebar";
 import * as HS from "../style/home/Hero.styles";
 import * as CS from "../style/home/Card.styles";
 import { themes, useSettings } from "../contexts/SettingsContext";
 import { FeaturedExhibit, Exhibition } from "../types/ApiType";
-
 
 /** 화면 표시용 간단 분류(라벨만) */
 function prettyCategory(it: RelicItem): string {
@@ -58,9 +55,7 @@ const Collection: React.FC = () => {
   const [items, setItems] = useState<RelicItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-   const navigate = useNavigate(); 
-   
-  
+  const navigate = useNavigate();
 
   // 사이드바 내용
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -73,7 +68,6 @@ const Collection: React.FC = () => {
 
   // 카테고리(서버 재조회에 사용)
   const [category, setCategory] = useState<Category>("ALL");
-  const [searchParams] = useSearchParams();
 
   const [pageNo, setPageNo] = useState(1);
   const [numOfRows] = useState(10);
@@ -103,8 +97,6 @@ const Collection: React.FC = () => {
     setKeyword(k.length ? k : undefined);
     setPageNo(1);
   }, [q]);
-  
-  
 
   // 데이터 로드 (검색어/카테고리/페이지 바뀔 때)
   useEffect(() => {
@@ -134,20 +126,8 @@ const Collection: React.FC = () => {
     };
   }, [pageNo, numOfRows, keyword, category]);
 
-  useEffect(() => {
-    const cat = searchParams.get("category") as Category | null;
-    if (cat) setCategory(cat);
-  }, [searchParams]);
-
-  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-
   return (
     <div className="p-4 max-w-5xl mx-auto">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <HS.CircleButton title="설정" onClick={toggleSidebar}>
-        ✧
-      </HS.CircleButton>
-
       <h1 className="text-xl font-bold mb-2">소장품 목록</h1>
 
       {/* 카테고리 탭 (클릭 시 서버 재조회) */}
@@ -160,7 +140,7 @@ const Collection: React.FC = () => {
           { key: "ETC", label: "기타" },
         ].map((c) => {
           const active = category === (c.key as Category);
-          
+
           return (
             <button
               key={c.key}
@@ -172,7 +152,7 @@ const Collection: React.FC = () => {
                 "px-3 py-1 rounded-full border text-sm " +
                 (active
                   ? "bg-black text-white border-black"
-                  : "bg-white text-gray-800 hover:bg-gray-100")
+                  : "bg-black text-white border-black")
               }
             >
               {c.label}
@@ -258,7 +238,6 @@ const Collection: React.FC = () => {
             <span className="text-sm">
               {pageNo} / {totalPages}
             </span>
-
             <button
               className="border px-3 py-1 rounded disabled:opacity-50"
               onClick={() => setPageNo((p) => Math.min(totalPages, p + 1))}

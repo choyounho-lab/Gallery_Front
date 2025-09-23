@@ -11,8 +11,8 @@ export interface RelicItem {
   // 공통 표시용
   title?: string;
   description?: string;
-  medium?: string;     // 재질(이름 우선 → 코드)
-  temporal?: string;   // 국적/시대(이름 우선 → 코드)
+  medium?: string; // 재질(이름 우선 → 코드)
+  temporal?: string; // 국적/시대(이름 우선 → 코드)
   relicId?: string;
   imageUrl?: string;
   thumbImage?: string;
@@ -63,13 +63,23 @@ export type Category = "ALL" | "PAINTING" | "CERAMIC" | "BOOK" | "ETC";
 /** 카테고리 → 대표 검색어(없으면 undefined) */
 const CAT_KEYWORDS: Record<Exclude<Category, "ALL" | "ETC">, string[]> = {
   PAINTING: ["그림", "회화", "유화", "수묵", "채색", "판화", "드로잉"],
-  CERAMIC:  ["도자", "도자기", "자기", "도기", "토기", "청자", "백자", "분청", "항아리"],
-  BOOK:     ["고서", "서적", "책", "문집", "경전", "목판", "판본"],
+  CERAMIC: [
+    "도자",
+    "도자기",
+    "자기",
+    "도기",
+    "토기",
+    "청자",
+    "백자",
+    "분청",
+    "항아리",
+  ],
+  BOOK: ["고서", "서적", "책", "문집", "경전", "목판", "판본"],
 };
 function keywordForCategory(cat: Category): string | undefined {
   if (cat === "PAINTING") return CAT_KEYWORDS.PAINTING[0];
-  if (cat === "CERAMIC")  return CAT_KEYWORDS.CERAMIC[0];
-  if (cat === "BOOK")     return CAT_KEYWORDS.BOOK[0];
+  if (cat === "CERAMIC") return CAT_KEYWORDS.CERAMIC[0];
+  if (cat === "BOOK") return CAT_KEYWORDS.BOOK[0];
   return undefined;
 }
 
@@ -86,17 +96,17 @@ function normalizeImg(u?: string): string | undefined {
 
 /** 원본 → 화면용 매핑 (상세필드 대폭 확장) */
 function mapRawToRelicItem(r: any): RelicItem {
-  const title =
-    r?.nameKr || r?.name || r?.title || "(제목 없음)";
+  const title = r?.nameKr || r?.name || r?.title || "(제목 없음)";
 
   // 이름을 우선으로 한 대표 표기
-  const medium =
-    r?.materialName1 || r?.materialName2 || r?.materialCode;
+  const medium = r?.materialName1 || r?.materialName2 || r?.materialCode;
   const temporal =
     r?.nationalityName2 || r?.nationalityName1 || r?.nationalityCode;
 
   // 설명: 박물관명 2/3를 합쳐 간단 표시
-  const description = [r?.museumName2, r?.museumName3].filter(Boolean).join(" ");
+  const description = [r?.museumName2, r?.museumName3]
+    .filter(Boolean)
+    .join(" ");
 
   return {
     ...r, // 원본 필드도 그대로 보존
@@ -106,7 +116,9 @@ function mapRawToRelicItem(r: any): RelicItem {
     temporal,
     relicId: r?.id,
     imageUrl: normalizeImg(r?.imgUri),
-    thumbImage: normalizeImg(r?.imgThumUriM || r?.imgThumUriS || r?.imgThumUriL),
+    thumbImage: normalizeImg(
+      r?.imgThumUriM || r?.imgThumUriS || r?.imgThumUriL
+    ),
 
     // 상세 노출용(이름/코드 쌍들 포함)
     author: r?.author,
@@ -156,7 +168,12 @@ function parseListPayload(data: any) {
     data?.response?.body?.resultCode ??
     data?.body?.resultCode;
 
-  const ok = code == null || code === "0000" || code === "00" || code === "0" || code === 0;
+  const ok =
+    code == null ||
+    code === "0000" ||
+    code === "00" ||
+    code === "0" ||
+    code === 0;
   if (!ok) {
     const msg =
       data?.resultMsg ??
@@ -172,16 +189,22 @@ function parseListPayload(data: any) {
     (Array.isArray(data?.list) && data.list) ||
     toArray<any>(
       data?.response?.body?.items?.item ??
-      data?.response?.body?.item ??
-      (Array.isArray(data?.response?.body?.items) ? data?.response?.body?.items : undefined) ??
-      (Array.isArray(data) ? data : undefined)
+        data?.response?.body?.item ??
+        (Array.isArray(data?.response?.body?.items)
+          ? data?.response?.body?.items
+          : undefined) ??
+        (Array.isArray(data) ? data : undefined)
     );
 
   const items = rawItems.map(mapRawToRelicItem);
 
   const pageNo = Number(data?.pageNo ?? data?.response?.body?.pageNo ?? 1);
-  const numOfRows = Number(data?.numOfRows ?? data?.response?.body?.numOfRows ?? items.length);
-  const totalCount = Number(data?.totalCount ?? data?.response?.body?.totalCount ?? items.length);
+  const numOfRows = Number(
+    data?.numOfRows ?? data?.response?.body?.numOfRows ?? items.length
+  );
+  const totalCount = Number(
+    data?.totalCount ?? data?.response?.body?.totalCount ?? items.length
+  );
 
   return { items, pageNo, numOfRows, totalCount };
 }
@@ -210,7 +233,9 @@ export async function getRelicList(params: {
 
 /** 상세 API (list[0]·item 모두 대응) */
 export async function getRelicDetail(id: string) {
-  const { data } = await api.get("/api/emuseum/relic/detail", { params: { id } });
+  const { data } = await api.get("/api/emuseum/relic/detail", {
+    params: { id },
+  });
 
   const body = data?.result ?? data?.response?.body ?? data?.body ?? data;
   const candidate =

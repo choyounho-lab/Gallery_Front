@@ -2,8 +2,16 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getRelicDetail, RelicItem } from "../api/emuseum";
 
-const Row: React.FC<{ label: string; value?: React.ReactNode }> = ({ label, value }) => {
-  if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) return null;
+const Row: React.FC<{ label: string; value?: React.ReactNode }> = ({
+  label,
+  value,
+}) => {
+  if (
+    value == null ||
+    value === "" ||
+    (Array.isArray(value) && value.length === 0)
+  )
+    return null;
   return (
     <div className="grid grid-cols-3 gap-3 py-2 border-b last:border-b-0">
       <div className="text-sm text-gray-500">{label}</div>
@@ -15,7 +23,6 @@ const Row: React.FC<{ label: string; value?: React.ReactNode }> = ({ label, valu
 const RelicDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
 
   const [item, setItem] = useState<RelicItem | null>(null);
   const [loading, setLoading] = useState(true);
@@ -138,7 +145,15 @@ const RelicDetailPage: React.FC = () => {
             .join(" · ")}
         />
 
-        <Row label="크기 범주" value={[item.sizeRangeName, item.sizeRangeCode && `(${item.sizeRangeCode})`].filter(Boolean).join(" ")} />
+        <Row
+          label="크기 범주"
+          value={[
+            item.sizeRangeName,
+            item.sizeRangeCode && `(${item.sizeRangeCode})`,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        />
         <Row label="크기 정보" value={item.sizeInfo} />
 
         <Row
@@ -166,7 +181,9 @@ const RelicDetailPage: React.FC = () => {
 
         <Row
           label="소장처"
-          value={[item.museumName1, item.museumName2, item.museumName3].filter(Boolean).join(" > ")}
+          value={[item.museumName1, item.museumName2, item.museumName3]
+            .filter(Boolean)
+            .join(" > ")}
         />
 
         <Row label="식별자" value={item.relicId} />
