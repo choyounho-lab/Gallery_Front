@@ -17,6 +17,7 @@
     "@types/react-dom": "^19.0.0",
     "axios": "^1.11.0",
     "cors": "^2.8.5",
+    "cross-env": "^10.0.0",
     "fast-average-color": "^9.5.0",
     "gsap": "^3.13.0",
     "react": "^19.1.0",
@@ -39,7 +40,7 @@
     "zod": "^3.25.67"
   },
   "scripts": {
-    "start": "set PORT=8080 && react-scripts start",
+    "start": "cross-env PORT=8080 && react-scripts start",
     "start:server": "ts-node --esm server.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
