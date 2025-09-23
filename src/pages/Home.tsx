@@ -1,8 +1,9 @@
-// src/pages/Home.tsx
+
+// Home.tsx
 import React, { useEffect, useState } from "react";
-import { Exhibition, FeaturedExhibit } from "../types/ApiType";
+import { instance } from "../api/instance";
+import { FeaturedExhibit, Exhibition } from "../types/ApiType";
 import { fetchKcisaItems, toFeaturedExhibit } from "../api/kcisa";
-import { dummyKcisaList } from "../api/dummyData"; // ✅ 더미 데이터 import
 import { themes, useSettings } from "../contexts/SettingsContext";
 
 import * as Common from "../style/home/Common.styles";
@@ -19,27 +20,42 @@ const Home: React.FC = () => {
 
   const { theme, fontSize } = useSettings();
 
-  // ===== KCISA 데이터 (서버 프록시 사용) =====
+  // ===== Hero 데이터 =====
   useEffect(() => {
+    const controller = new AbortController();
+
     (async () => {
       try {
-        const items = await fetchKcisaItems(1, 20); // 프록시 서버 호출
-        console.log("✅ KCISA 응답:", items);
-        setKcisaList(items);
-
-        // 첫 Hero용 데이터도 KCISA에서 가져오기
-        if (items.length > 0) {
-          setExhibits(items.slice(0, 5).map(toFeaturedExhibit));
+        const res = await instance.get<FeaturedExhibit[]>(
+          "/api/home/featured",
+          { signal: controller.signal }
+        );
+        setExhibits(res.data);
+      } catch {
+        try {
+          const items = await fetchKcisaItems(1, 100, controller.signal);
+          if (items.length > 0) {
+            setExhibits(items.map((it) => toFeaturedExhibit(it)));
+          }
+        } catch {
+          setExhibits([
+            {
+              id: 1,
+              title: "현대미술 소장품",
+              subTitle: "M2",
+              period: "2025.02.27. –",
+              heroImage:
+                "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=2069&auto=format&fit=crop",
+              detailUrl: "#",
+            },
+          ]);
         }
-      } catch (err) {
-        console.error("❌ KCISA 데이터 가져오기 실패:", err);
-        // ✅ API 실패 시 dummyKcisaList 사용
-        setKcisaList(dummyKcisaList);
-        setExhibits(dummyKcisaList.slice(0, 5).map(toFeaturedExhibit));
       } finally {
         setLoading(false);
       }
     })();
+
+    return () => controller.abort();
   }, []);
 
   // ===== Hero 자동 슬라이드 =====
@@ -51,7 +67,7 @@ const Home: React.FC = () => {
     return () => clearInterval(timer);
   }, [exhibits]);
 
-  // ===== 카드 컴포넌트1 =====
+  // ===== 카드 컴포넌트 =====
   const ExhibitCard: React.FC<{ item: Exhibition }> = ({ item }) => (
     <CS.Card>
       <CS.CardThumb $src={item.IMAGE_OBJECT} />
@@ -73,9 +89,54 @@ const Home: React.FC = () => {
     </CS.Card>
   );
 
+  // ===== KCISA 데이터 =====
+  useEffect(() => {
+    const controller = new AbortController();
+
+    (async () => {
+      try {
+        const items = await fetchKcisaItems(1, 8, controller.signal); // 넉넉히 가져오기
+        setKcisaList(items);
+      } catch {
+        setKcisaList([]);
+      }
+    })();
+
+    return () => controller.abort();
+  }, []);
+
   const currentExhibit = exhibits[currentIndex];
+  const now = new Date();
 
   // ===== KCISA 분류 =====
+  const ongoing = kcisaList.filter((it) => {
+    if (!it.PERIOD) return false;
+    const [startStr, endStr] = it.PERIOD.split("–").map((s) => s.trim());
+    if (!startStr) return false;
+    const start = new Date(startStr.replace(/\./g, "-"));
+    if (!endStr) {
+      // 종료일 없으면 → 현재 진행 중으로 간주
+      return start <= now;
+    }
+    const end = new Date(endStr.replace(/\./g, "-"));
+    return start <= now && now <= end;
+  });
+
+  const upcoming = kcisaList.filter((it) => {
+    if (!it.PERIOD) return false;
+    const [startStr] = it.PERIOD.split("–").map((s) => s.trim());
+    if (!startStr) return false;
+    const start = new Date(startStr.replace(/\./g, "-"));
+    return start > now;
+  });
+
+  const byGenre: Record<string, Exhibition[]> = {};
+  kcisaList.forEach((it) => {
+    if (!it.GENRE) return;
+    if (!byGenre[it.GENRE]) byGenre[it.GENRE] = [];
+    byGenre[it.GENRE].push(it);
+  });
+
   const byOrg: Record<string, Exhibition[]> = {};
   kcisaList.forEach((it) => {
     if (!it.CNTC_INSTT_NM) return;
@@ -83,14 +144,12 @@ const Home: React.FC = () => {
     byOrg[it.CNTC_INSTT_NM].push(it);
   });
 
-  const recommended = [...kcisaList]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 8);
+  const recommended = kcisaList.sort(() => Math.random() - 0.5).slice(0, 8);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-
   return (
     <Common.Root>
+      {/* Sidebar에 필수 props 전달 */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Hero */}
