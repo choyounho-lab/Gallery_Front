@@ -12,7 +12,7 @@ function Router() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          {/* 로그인 */}
+          {/* 로그인! */}
           <Route path="member/login" element={<Login />} />
           <Route path="collection" element={<Collection />} />
 
