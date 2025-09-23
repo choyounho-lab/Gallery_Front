@@ -51,7 +51,7 @@ const Home: React.FC = () => {
     return () => clearInterval(timer);
   }, [exhibits]);
 
-  // ===== 카드 컴포넌트 =====
+  // ===== 카드 컴포넌트1 =====
   const ExhibitCard: React.FC<{ item: Exhibition }> = ({ item }) => (
     <CS.Card>
       <CS.CardThumb $src={item.IMAGE_OBJECT} />
