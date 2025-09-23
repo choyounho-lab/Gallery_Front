@@ -1,83 +1,93 @@
 // src/style/home/Card.styles.ts
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Section = styled.section`
-    position: relative;
-    z-index: 1;
-    padding: 56px 24px 80px;
-    max-width: 1280px;
-    margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 56px 24px 80px;
+  max-width: 1280px;
+  margin: 0 auto;
 `;
 
 export const SectionTitle = styled.h2`
-    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
-    font-weight: 800;
-    margin: 0 0 20px;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  margin: 0 0 20px;
 `;
 
 export const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
-    @media (max-width: 1100px) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-    @media (max-width: 780px) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media (max-width: 780px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 `;
 
 export const Card = styled.article`
-    background: rgba(255, 255, 255, 0.06);
-    border: 10px solid rgba(226, 18, 18, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;
-    &:hover {
-        transform: translateY(-2px);
-        border-color: rgba(255, 255, 255, 0.25);
-        box-shadow: 0 10px 24px rgba(33, 29, 29, 0.35);
-    }
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  }
 `;
 
 export const CardThumb = styled.div<{ $src?: string }>`
-    height: 180px;
-    background: ${({ $src }) =>
-        $src
-            ? `url(${$src}) center/cover no-repeat`
-            : 'linear-gradient(135deg,#2a2e36,#1a1c22)'};
+  height: 180px;
+  background: ${({ $src }) =>
+    $src
+      ? `url(${$src}) center/cover no-repeat`
+      : "linear-gradient(135deg,#2a2e36,#1a1c22)"};
 `;
 
 export const CardBody = styled.div`
-    padding: 14px 14px 16px;
+  padding: 14px 14px 16px;
 `;
 
-export const CardTitle = styled.h3<{ themeMode: string }>`
-    font-size: 1rem;
-    color: ${({ themeMode }) =>
-        themeMode === 'dark' || themeMode === 'contrast'
-            ? '#fff'
-            : '#e1dcdcff'};
+// SettingsContext의 테마 값에 맞춰 범위 확장
+type ThemeMode =
+  | "light"
+  | "dark"
+  | "contrast"
+  | "default"
+  | "white"
+  | (string & {});
+
+export const CardTitle = styled.h3<{ $themeMode?: ThemeMode }>`
+  font-size: 1rem;
+  color: ${({ $themeMode }) =>
+    $themeMode === "dark" || $themeMode === "contrast" ? "#fff" : "#333"};
 `;
 
 export const CardMeta = styled.div`
-    font-size: 0.875rem;
-    opacity: 0.85;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  font-size: 0.875rem;
+  opacity: 0.85;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 export const CardLink = styled.a`
-    display: inline-flex;
-    margin-top: 10px;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #14a984ff;
-    text-decoration: none;
+  display: inline-flex;
+  margin-top: 10px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #00eaff;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(0, 234, 255, 0.35);
+  width: fit-content;
 
-    width: fit-content;
-    &:hover {
-        border-bottom-color: rgba(0, 234, 255, 0.8);
-    }
+  &:hover {
+    border-bottom-color: rgba(0, 234, 255, 0.8);
+  }
 `;

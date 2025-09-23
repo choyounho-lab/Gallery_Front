@@ -37,7 +37,7 @@ const ExhibitionCardList: React.FC<Props> = ({
         <CS.Card key={it.LOCAL_ID}>
           <CS.CardThumb $src={it.IMAGE_OBJECT} />
           <CS.CardBody>
-            <CS.CardTitle themeMode={themeMode}>{it.TITLE}</CS.CardTitle>
+            <CS.CardTitle $themeMode={themeMode}>{it.TITLE}</CS.CardTitle>
             <CS.CardMeta>
               {it.CNTC_INSTT_NM && <span>기관: {it.CNTC_INSTT_NM}</span>}
               {it.PERIOD && <span>기간: {it.PERIOD}</span>}
